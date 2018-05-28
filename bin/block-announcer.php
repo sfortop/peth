@@ -1,7 +1,7 @@
 #!/usr/local/bin/php
 <?php
 /**
- * Copyright Serhii Borodai (c) 2017-2018.
+ * Copyright Serhii Borodai (c) 2018.
  */
 
 use Daemon\BlockAnnouncer;

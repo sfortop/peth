@@ -4,7 +4,7 @@
  * Copyright Serhii Borodai (c) 2018.
  */
 
-use Daemon\BlockReader;
+use Daemon\TransactionReader;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -16,7 +16,7 @@ require __DIR__ . '/../vendor/autoload.php';
 (function () {
     /** @var ContainerInterface $container */
     $container = require __DIR__ . '/../config/container.php';
-    $blockReader = $container->get(BlockReader::class);
+    $transactionReader = $container->get(TransactionReader::class);
 
-    $blockReader->process();
+    $transactionReader->process();
 })();
