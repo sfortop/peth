@@ -75,6 +75,7 @@ class TransactionReader implements DaemonInterface, RedisInteractionInterface
         $this->timeoutOnEmptyList = $timeoutOnEmptyList;
         $this->redis = $redis;
         $this->contractAddress = $contractAddress;
+        $this->connectRedis($this->redis, $this->redisConfig);
     }
 
     public function process()
@@ -83,7 +84,9 @@ class TransactionReader implements DaemonInterface, RedisInteractionInterface
             try {
                 $this->redis->ping();
                 $txId = $this->redis->rPop($this->redisListKey);
-                if (!$txId) {
+                if (substr($txId, 0, 2) !== '0x') {
+                    $this->logger->info(sprintf('skip incorrect id %s', $txId));
+                } elseif (!$txId) {
                     sleep($this->timeoutOnEmptyList);
                 } else {
                     try {
@@ -92,13 +95,19 @@ class TransactionReader implements DaemonInterface, RedisInteractionInterface
 
                         $inputData = $transaction->input();
                         if ($inputData instanceof TransactionInputTransfer && $transaction->to == $this->contractAddress) {
-                            $this->logger->info(sprintf('Found transfer amount %s to %s', $inputData->amount, $inputData->payee));
-
-                            $pushed = $this->redisLPush(self::class, json_encode(['hash' => $txId, 'input' => $inputData]));
+                            $this->logger->info(sprintf('Found transfer amount %s to %s',
+                                bcdiv($inputData->wei(), bcpow('10', '8')),
+                                $inputData->payee));
+                            $pushed = $this->redisLPush(self::class, [json_encode(['hash' => $txId, 'amount' => $inputData->wei(), 'payee' => $inputData->payee])]);
                             if ($pushed === false) {
                                 throw new \Exception(sprintf("Can't push transactions %s",
                                     $transaction->hash));
                             }
+                        } elseif ($inputData instanceof TransactionInputTransfer) {
+                            $this->logger->info(sprintf('Contract %s', $transaction->to));
+                            $this->logger->info(sprintf('Found transfer amount %s to %s', $inputData->amount, $inputData->payee));
+                        } else {
+                            $this->logger->info(sprintf('skipped %s', $transaction->hash));
                         }
                     } catch (\RedisException $e) {
                         $this->logger->error($e->getMessage());
@@ -109,6 +118,7 @@ class TransactionReader implements DaemonInterface, RedisInteractionInterface
                     }
                 }
             } catch (\RedisException $exception) {
+                $this->logger->error($exception->getMessage());
                 $this->connectRedis($this->redis, $this->redisConfig);
             }
         }

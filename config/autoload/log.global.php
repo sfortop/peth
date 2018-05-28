@@ -24,9 +24,21 @@ return [
             [
                 'name' => \Zend\Log\Writer\Stream::class,
                 'options' => [
-                    "stream" => 'php://stdout',
+                    "stream" => 'php://output',
                 ]
-            ]
+            ],
+//            [
+//                'name' => \Zend\Log\Writer\Stream::class,
+//                'options' => [
+//                    "stream" => 'php://stderr',
+//                ]
+//            ],
+//            [
+//                'name' => \Zend\Log\Writer\Stream::class,
+//                'options' => [
+//                    "stream" => 'php://stdout',
+//                ]
+//            ],
         ],
     ]
 ];

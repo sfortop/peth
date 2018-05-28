@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Daemon\TransactionReader;
+use Daemon\TransactionReaderFactory;
 use EthereumRPC\EthereumRPC;
 use Infrastructure\Factory\EthRPCFactory;
 
@@ -24,8 +26,8 @@ return [
         ],
         // Use 'factories' for services provided by callbacks/factory classes.
         'factories'  => [
-            EthereumRPC::class => EthRPCFactory::class
-
+            EthereumRPC::class => EthRPCFactory::class,
+            TransactionReader::class => TransactionReaderFactory::class,
             // Fully\Qualified\ClassName::class => Fully\Qualified\FactoryName::class,
         ],
     ],

@@ -10,5 +10,8 @@
 return [
     'ethereum' => [
         'host' => '34.196.204.233',
-    ]
+        'contracts' => [
+            'DMT' => '0x2ccbff3a042c68716ed2a2cb0c544a9f1d1935e1',
+        ],
+    ],
 ];
