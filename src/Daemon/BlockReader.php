@@ -63,6 +63,9 @@ class BlockReader implements DaemonInterface, RedisInteractionInterface
         $this->logger = $logger;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function process()
     {
         while (true) {
@@ -85,10 +88,12 @@ class BlockReader implements DaemonInterface, RedisInteractionInterface
                         }
                     } catch (\RedisException $e) {
                         $this->logger->error($e->getMessage());
+                        throw new \Exception(sprintf("Can't push transactions %s",
+                            json_encode($block->transactions)));
                     } catch (\Exception $e) {
                         $this->logger->error($e->getMessage());
                         $this->logger->alert(sprintf('return block %s to reparse', $blockToParse));
-                        $this->redisLPush(self::class, [$blockToParse]);
+                        $this->redisLPush($this->redisListKey, [$blockToParse]);
                     }
                 }
             } catch (\RedisException $exception) {
