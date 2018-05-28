@@ -1,0 +1,2 @@
+supervisord -c supervisor.conf
+

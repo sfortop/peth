@@ -1,0 +1,13 @@
+version: "3"
+services:
+  peth:
+    #build: .
+    image: fortop/peth:alpha
+    volumes:
+      - .:/var/www/peth
+    links:
+      - redis
+  redis:
+    image: redis
+volumes:
+  peth:

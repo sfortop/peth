@@ -1,0 +1,11 @@
+FROM php:7.2.6-cli-stretch
+LABEL maintainer="clarifying@gmail.com"
+
+RUN apt-get update \
+&& apt-get -y install \
+supervisor \
+&& pecl install redis-4.0.2 \
+&& echo "extension=redis" >> /usr/local/etc/php/conf.d/redis.ini \
+&& docker-php-ext-install opcache bcmath \
+&& docker-php-ext-enable opcache redis bcmath \
+&& curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
