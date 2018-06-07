@@ -2,7 +2,7 @@
 /**
  * zumpay-billing
  *
- * @author Serhii Borodai <serhii.borodai@globalgames.net>
+ * @author Serhii Borodai <clarifying@gmail.com>
  */
 
 use Infrastructure\Factory\LoggerFactory;

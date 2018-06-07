@@ -4,7 +4,7 @@
  */
 
 /**
- * Created by Serhii Borodai <serhii.borodai@globalgames.net>
+ * Created by Serhii Borodai <clarifying@gmail.com>
  */
 
 namespace Proxy;
@@ -18,7 +18,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 /**
  * Class Container
  * @package Proxy
- * @author Serhii Borodai <serhii.borodai@globalgames.net>
+ * @author Serhii Borodai <clarifying@gmail.com>
  */
 class Container implements ServiceLocatorInterface
 {

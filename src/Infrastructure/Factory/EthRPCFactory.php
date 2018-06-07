@@ -4,7 +4,7 @@
  */
 
 /**
- * Created by Serhii Borodai <serhii.borodai@globalgames.net>
+ * Created by Serhii Borodai <clarifying@gmail.com>
  */
 
 namespace Infrastructure\Factory;

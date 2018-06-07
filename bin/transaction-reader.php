@@ -8,7 +8,7 @@ use Daemon\TransactionReader;
 use Psr\Container\ContainerInterface;
 
 /**
- * Created by Serhii Borodai <serhii.borodai@globalgames.net>
+ * Created by Serhii Borodai <clarifying@gmail.com>
  */
 
 require __DIR__ . '/../vendor/autoload.php';
