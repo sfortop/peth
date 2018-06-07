@@ -95,10 +95,13 @@ class TransactionReader implements DaemonInterface, RedisInteractionInterface
 
                         $inputData = $transaction->input();
                         if ($inputData instanceof TransactionInputTransfer && $transaction->to == $this->contractAddress) {
+                            $amount = bcdiv($inputData->wei(), bcpow('10', '8'));
                             $this->logger->info(sprintf('Found transfer amount %s to %s',
-                                bcdiv($inputData->wei(), bcpow('10', '8')),
+                                $amount,
                                 $inputData->payee));
-                            $pushed = $this->redisLPush(self::class, [json_encode(['hash' => $txId, 'amount' => $inputData->wei(), 'payee' => $inputData->payee])]);
+                            $pushed = $this->redisLPush(self::class, [
+                                json_encode(['hash' => $txId, 'amount' => $amount, 'payee' => $inputData->payee])
+                            ]);
                             if ($pushed === false) {
                                 throw new \Exception(sprintf("Can't push transactions %s",
                                     $transaction->hash));
