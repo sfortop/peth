@@ -18,13 +18,13 @@ class RedisConfig
     protected $persistentId;
 
     /**
-     * Redis constructor.
-     * @param $host
-     * @param $port
-     * @param $timeout
-     * @param $persistentId
+     * RedisConfig constructor.
+     * @param string $host
+     * @param int $port
+     * @param int $timeout
+     * @param string $persistentId
      */
-    public function __construct($host, $port = 6379, $timeout = 0, $persistentId = self::class)
+    public function __construct(string $host, $port = 6379, $timeout = 0, $persistentId = self::class)
     {
         $this->host = $host;
         $this->port = $port;

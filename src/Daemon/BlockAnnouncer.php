@@ -89,7 +89,7 @@ class BlockAnnouncer implements DaemonInterface, RedisInteractionInterface
 
                         $pushed = $this->redisLPush(self::class, range(bcadd($announced, 1, 0), $announceBucket));
                         if ($pushed === false) {
-                            throw new \Exception(sprintf("Can't push announce bucket %s"), $announceBucket);
+                            throw new \Exception(sprintf("Can't push announce bucket %s", $announceBucket));
                         }
                         $this->logger->info(sprintf("announced %s blocks", bcsub($announceBucket, $announced,0)));
 

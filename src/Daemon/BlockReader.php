@@ -77,14 +77,18 @@ class BlockReader implements DaemonInterface, RedisInteractionInterface
                 } else {
                     try {
                         $block = $this->eth->getBlock($blockToParse);
-                        $this->logger->info(sprintf('Process block %s', $block->number()));
-                        $this->logger->info(sprintf('Found %d transactions', count($block->transactions)));
-                        if (count($block->transactions) > 0) {
-                            $pushed = $this->redisLPush(self::class, $block->transactions);
-                            if ($pushed === false) {
-                                throw new \Exception(sprintf("Can't push transactions %s",
-                                    json_encode($block->transactions)));
+                        if ($block) {
+                            $this->logger->info(sprintf('Process block %s', $block->number()));
+                            $this->logger->info(sprintf('Found %d transactions', count($block->transactions)));
+                            if (count($block->transactions) > 0) {
+                                $pushed = $this->redisLPush(self::class, $block->transactions);
+                                if ($pushed === false) {
+                                    throw new \Exception(sprintf("Can't push transactions %s",
+                                        json_encode($block->transactions)));
+                                }
                             }
+                        } else {
+                            $this->logger->alert(sprintf('Block [%s] not found', $blockToParse));
                         }
                     } catch (\RedisException $e) {
                         $this->logger->error($e->getMessage());
