@@ -100,7 +100,12 @@ class TransactionReader implements DaemonInterface, RedisInteractionInterface
                                 $amount,
                                 $inputData->payee));
                             $pushed = $this->redisLPush(self::class, [
-                                json_encode(['hash' => $txId, 'amount' => $amount, 'payee' => $inputData->payee])
+                                json_encode([
+                                    'hash' => $txId,
+                                    'amount' => $amount,
+                                    'payee' => $inputData->payee,
+                                    'payer' => $transaction->to
+                                ])
                             ]);
                             if ($pushed === false) {
                                 throw new \Exception(sprintf("Can't push transactions %s",

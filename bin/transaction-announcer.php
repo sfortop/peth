@@ -3,7 +3,7 @@
  * Copyright Serhii Borodai (c) 2018.
  */
 
-use Daemon\TransactionChecker;
+use Daemon\TransactionAnnouncer;
 use Psr\Container\ContainerInterface;
 
 
@@ -16,7 +16,7 @@ require __DIR__ . '/../vendor/autoload.php';
 (function () {
     /** @var ContainerInterface $container */
     $container = require __DIR__ . '/../config/container.php';
-    $transactionReader = $container->get(TransactionChecker::class);
+    $transactionReader = $container->get(TransactionAnnouncer::class);
 
     $transactionReader->process();
 })();

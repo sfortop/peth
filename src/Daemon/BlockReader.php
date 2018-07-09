@@ -61,6 +61,9 @@ class BlockReader implements DaemonInterface, RedisInteractionInterface
         $this->redisListKey = $redisListKey;
         $this->timeoutOnEmptyList = $timeoutOnEmptyList;
         $this->logger = $logger;
+
+        $this->connectRedis($this->redis, $this->redisConfig);
+
     }
 
     /**
