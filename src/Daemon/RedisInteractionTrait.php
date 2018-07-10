@@ -16,6 +16,7 @@ trait RedisInteractionTrait
 {
     public function connectRedis(\Redis $redis, RedisConfig $redisConfig)
     {
+        //@todo add database selection
         $redis->pconnect($redisConfig->getHost(), $redisConfig->getPort(), $redisConfig->getTimeout(), $redisConfig->getPersistentId());
     }
 
