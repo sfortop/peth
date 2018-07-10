@@ -128,6 +128,5 @@ class TransactionChecker implements DaemonInterface, RedisInteractionInterface
             }
         }
 
-
     }
 }

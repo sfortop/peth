@@ -38,6 +38,7 @@
         "furqansiddiqui/erc20-php": "dev-master",
         "furqansiddiqui/ethereum-rpc": "dev-master",
         "furqansiddiqui/http-client": "dev-master",
+        "prolic/humus-amqp": "v1.4.0",
         "roave/security-advisories": "dev-master",
         "zendframework/zend-component-installer": "^2.1.1",
         "zendframework/zend-config-aggregator": "^1.0",

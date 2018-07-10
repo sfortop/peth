@@ -10,8 +10,11 @@ namespace Daemon;
 
 use Config\RedisConfig;
 use EthereumRPC\API\Eth;
+use Humus\Amqp\JsonProducer;
 use Infrastructure\DTO\MonitoringMessage;
+use Infrastructure\DTO\Transaction;
 use Psr\Log\LoggerInterface;
+use Zend\Hydrator\ClassMethods;
 
 class TransactionAnnouncer implements DaemonInterface, RedisInteractionInterface
 {
@@ -45,28 +48,34 @@ class TransactionAnnouncer implements DaemonInterface, RedisInteractionInterface
      * @var string
      */
     private $currency;
-    private $rmq;
+    private $producer;
+    /**
+     * @var ClassMethods
+     */
+    private $hydrator;
 
     /**
      * TransactionAnnouncer constructor.
      * @param LoggerInterface $logger
      * @param Eth $eth
+     * @param ClassMethods $hydrator
      * @param \Redis $redis
      * @param RedisConfig $redisConfig
      * @param string $redisListKey
      * @param int $timeoutOnEmptyList
      * @param string $currency
-     * @param $rmq
+     * @param $producer
      */
     public function __construct(
         LoggerInterface $logger,
         Eth $eth,
+        ClassMethods $hydrator,
+        JsonProducer $producer,
         \Redis $redis,
         RedisConfig $redisConfig,
         $redisListKey = TransactionChecker::class,
         $timeoutOnEmptyList = 5,
-        $currency = 'DMT',
-        $rmq
+        $currency = 'DMT'
     )
     {
 
@@ -77,20 +86,47 @@ class TransactionAnnouncer implements DaemonInterface, RedisInteractionInterface
         $this->redisListKey = $redisListKey;
         $this->timeoutOnEmptyList = $timeoutOnEmptyList;
         $this->currency = $currency;
-        $this->rmq = $rmq;
+        $this->producer = $producer;
+        $this->hydrator = $hydrator;
 
         $this->connectRedis($this->redis, $this->redisConfig);
     }
 
     public function process()
     {
-        //@todo use generated hydrator for conversion
-        $message = new MonitoringMessage();
+        while (true) {
+            try {
+                $this->redis->ping();
+                $transactionData = $this->redis->rPop($this->redisListKey);
+                if (!$transactionData) {
+                    sleep($this->timeoutOnEmptyList);
+                } else {
+                    try {
+                        $tmp = json_decode($transactionData, true);
+                        if (!$tmp) {
+                            throw new \Exception(sprintf('Failed to decode transaction data json [%s]', $transactionData));
+                        }
+                        /** @var Transaction $transaction */
+                        $transaction = $this->hydrator->hydrate($tmp, new Transaction());
 
-        $message->setAmount($transaction->getAmount());
-        $message->setFrom($transaction->getPayer());
-        $message->setTo($transaction->getPayee());
-        $message->setCurrency($this->currency);
+                        //@todo use generated hydrator for conversion
+                        $message = new MonitoringMessage();
+
+                        $message->setAmount($transaction->getAmount());
+                        $message->setFrom($transaction->getPayer());
+                        $message->setTo($transaction->getPayee());
+                        $message->setCurrency($this->currency);
+
+                        $this->producer->publish($message);
+                    } catch (\Exception $e) {
+                        $this->logger->error($e->getMessage());
+                    }
+                }
+            } catch (\RedisException $exception) {
+                $this->logger->error($exception->getMessage());
+                $this->connectRedis($this->redis, $this->redisConfig);
+            }
+        }
 
     }
 }

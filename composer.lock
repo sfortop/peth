@@ -4,8 +4,63 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b99d53bd8b60462d7e02f2cc387b1f13",
+    "content-hash": "b76491ae3e6444db7a5cd2e9ce6c1c4f",
     "packages": [
+        {
+            "name": "beberlei/assert",
+            "version": "v2.9.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/beberlei/assert.git",
+                "reference": "ec9e4cf0b63890edce844ee3922e2b95a526e936"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/beberlei/assert/zipball/ec9e4cf0b63890edce844ee3922e2b95a526e936",
+                "reference": "ec9e4cf0b63890edce844ee3922e2b95a526e936",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.1.1",
+                "phpunit/phpunit": "^4.8.35|^5.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Assert\\": "lib/Assert"
+                },
+                "files": [
+                    "lib/Assert/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Richard Quadling",
+                    "email": "rquadling@gmail.com",
+                    "role": "Collaborator"
+                }
+            ],
+            "description": "Thin assertion library for input validation in business models.",
+            "keywords": [
+                "assert",
+                "assertion",
+                "validation"
+            ],
+            "time": "2018-06-11T17:15:25+00:00"
+        },
         {
             "name": "container-interop/container-interop",
             "version": "1.2.0",
@@ -205,6 +260,72 @@
             "time": "2018-02-28T08:28:50+00:00"
         },
         {
+            "name": "marc-mabe/php-enum",
+            "version": "v3.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/marc-mabe/php-enum.git",
+                "reference": "aa94dd121255747539807b0f23778873d9961296"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/marc-mabe/php-enum/zipball/aa94dd121255747539807b0f23778873d9961296",
+                "reference": "aa94dd121255747539807b0f23778873d9961296",
+                "shasum": ""
+            },
+            "require": {
+                "ext-reflection": "*",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "lstrojny/functional-php": "1.2.* || 1.0.*",
+                "phpbench/phpbench": "@dev",
+                "phpunit/phpunit": "^5.7 || ^6.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev",
+                    "dev-2.x": "2.3-dev",
+                    "dev-1.x": "1.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "MabeEnum\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Marc Bennewitz",
+                    "email": "dev@mabe.berlin",
+                    "homepage": "http://mabe.berlin/",
+                    "role": "Lead"
+                }
+            ],
+            "description": "Simple and fast implementation of enumerations with native PHP>=5.6",
+            "homepage": "https://github.com/marc-mabe/php-enum",
+            "keywords": [
+                "enum",
+                "enum-map",
+                "enum-set",
+                "enumeration",
+                "enumerator",
+                "enummap",
+                "enumset",
+                "map",
+                "set",
+                "type",
+                "type-hint",
+                "typehint"
+            ],
+            "time": "2018-05-22T10:45:45+00:00"
+        },
+        {
             "name": "nikic/fast-route",
             "version": "v1.3.0",
             "source": {
@@ -249,6 +370,81 @@
                 "routing"
             ],
             "time": "2018-02-13T20:26:39+00:00"
+        },
+        {
+            "name": "prolic/humus-amqp",
+            "version": "v1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/prolic/HumusAmqp.git",
+                "reference": "2426e683ed47a401fd15ff8e12acdac9ff726e3b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/prolic/HumusAmqp/zipball/2426e683ed47a401fd15ff8e12acdac9ff726e3b",
+                "reference": "2426e683ed47a401fd15ff8e12acdac9ff726e3b",
+                "shasum": ""
+            },
+            "require": {
+                "beberlei/assert": "^2.4",
+                "marc-mabe/php-enum": "^2.2 || ^3.0",
+                "php": "~7.0",
+                "psr/log": "^1.0"
+            },
+            "conflict": {
+                "container-interop/container-interop": "<1.2",
+                "sandrokeil/interop-config": "<1.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.8.1",
+                "malukenho/docheader": "^0.1.4",
+                "php-amqplib/php-amqplib": "^2.7.1",
+                "phpspec/prophecy": "^1.7",
+                "phpunit/phpunit": "^6.5.7",
+                "psr/container": "^1.0",
+                "sandrokeil/interop-config": "^1.0",
+                "satooshi/php-coveralls": "^2.0",
+                "symfony/console": "^2.5|^3.0",
+                "zendframework/zend-servicemanager": "^2.7 || ^3.0"
+            },
+            "suggest": {
+                "ext-amqp": ">= 1.9.3 For usage together with php amqp extension",
+                "ext-pcntl": "For process control management",
+                "php-amqplib/php-amqplib": ">= 2.7.1 For usage together with php-amqplib",
+                "psr/container": "For usage of provided factories",
+                "sandrokeil/interop-config": "For usage of provided factories",
+                "symfony/console": "For usage of the provided console tool"
+            },
+            "bin": [
+                "bin/humus-amqp"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Humus\\Amqp\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sascha-Oliver Prolic",
+                    "email": "saschaprolic@googlemail.com"
+                }
+            ],
+            "description": "PHP-AMQP library with RabbitMQ Extensions",
+            "homepage": "https://github.com/prolic/HumusAmqp",
+            "keywords": [
+                "AMQP",
+                "humus",
+                "messaging",
+                "queue",
+                "rabbit",
+                "rabbitmq"
+            ],
+            "time": "2018-03-03T13:41:38+00:00"
         },
         {
             "name": "psr/container",
@@ -843,16 +1039,16 @@
         },
         {
             "name": "zendframework/zend-diactoros",
-            "version": "1.8.0",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-diactoros.git",
-                "reference": "11c9c1835e60eef6f9234377a480fcec096ebd9e"
+                "reference": "63d920d1c9ebc009d860c3666593a66298727dd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/11c9c1835e60eef6f9234377a480fcec096ebd9e",
-                "reference": "11c9c1835e60eef6f9234377a480fcec096ebd9e",
+                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/63d920d1c9ebc009d860c3666593a66298727dd6",
+                "reference": "63d920d1c9ebc009d860c3666593a66298727dd6",
                 "shasum": ""
             },
             "require": {
@@ -902,7 +1098,7 @@
                 "psr",
                 "psr-7"
             ],
-            "time": "2018-06-27T18:52:43+00:00"
+            "time": "2018-07-09T21:17:27+00:00"
         },
         {
             "name": "zendframework/zend-escaper",

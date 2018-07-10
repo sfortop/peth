@@ -12,16 +12,16 @@ namespace Daemon;
 
 use Config\RedisConfig;
 use EthereumRPC\API\Eth;
-use Infrastructure\Exception\InvalidConfigException;
+use Humus\Amqp\JsonProducer;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Zend\Hydrator\ClassMethods;
 
-class TransactionReaderFactory
+class TransactionAnnouncerFactory
 {
     /**
      * @param ContainerInterface $container
-     * @return TransactionReader
-     * @throws InvalidConfigException
+     * @return TransactionAnnouncer
      */
     public function __invoke(ContainerInterface $container)
     {
@@ -29,19 +29,18 @@ class TransactionReaderFactory
         $eth = $container->get(Eth::class);
         $redis = $container->get(\Redis::class);
         $redisConfig = $container->get(RedisConfig::class);
-        if (!isset($container->get('config')['ethereum']['contracts']['DMT'])) {
-            throw new InvalidConfigException('DMT contract address not found');
-        }
-        $contractAddress = $container->get('config')['ethereum']['contracts']['DMT'];
 
-
-        return new TransactionReader(
+        /** @var JsonProducer $producer */
+        $producer = $container->get('incoming-transactions');
+        return new TransactionAnnouncer(
             $logger,
             $eth,
+            new ClassMethods(),
+            $producer,
             $redis,
             $redisConfig,
-            BlockReader::class,
-            $contractAddress
+            TransactionChecker::class
         );
     }
+
 }

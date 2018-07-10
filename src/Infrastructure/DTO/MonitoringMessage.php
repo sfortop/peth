@@ -33,12 +33,12 @@ class MonitoringMessage
     /**
      * @var string
      */
-    protected $seed;
+    protected $seed = '';
 
     /**
      * @return string
      */
-    public function getHash(): string
+    public function getHash(): ?string
     {
         return $this->hash;
     }
@@ -54,7 +54,7 @@ class MonitoringMessage
     /**
      * @return string
      */
-    public function getFrom(): string
+    public function getFrom(): ?string
     {
         return $this->from;
     }
@@ -70,7 +70,7 @@ class MonitoringMessage
     /**
      * @return string
      */
-    public function getTo(): string
+    public function getTo(): ?string
     {
         return $this->to;
     }
@@ -86,7 +86,7 @@ class MonitoringMessage
     /**
      * @return string
      */
-    public function getAmount(): string
+    public function getAmount(): ?string
     {
         return $this->amount;
     }
@@ -102,7 +102,7 @@ class MonitoringMessage
     /**
      * @return string
      */
-    public function getCurrency(): string
+    public function getCurrency(): ?string
     {
         return $this->currency;
     }
