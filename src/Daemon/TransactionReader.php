@@ -84,10 +84,11 @@ class TransactionReader implements DaemonInterface, RedisInteractionInterface
             try {
                 $this->redis->ping();
                 $txId = $this->redis->rPop($this->redisListKey);
-                if (substr($txId, 0, 2) !== '0x') {
-                    $this->logger->info(sprintf('skip incorrect id %s', $txId));
-                } elseif (!$txId) {
+                if (!$txId) {
                     sleep($this->timeoutOnEmptyList);
+                } elseif (substr($txId, 0, 2) !== '0x') {
+                    $this->logger->info(sprintf('skip incorrect id %s', $txId));
+
                 } else {
                     try {
                         $transaction = $this->eth->getTransaction($txId);
