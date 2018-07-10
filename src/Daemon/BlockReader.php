@@ -90,6 +90,7 @@ class BlockReader implements DaemonInterface, RedisInteractionInterface
                                         json_encode($block->transactions)));
                                 }
                             }
+                            $this->logger->info(sprintf('End of block [%s] processing', $block->number()));
                         } else {
                             $this->logger->alert(sprintf('Block [%s] not found', $blockToParse));
                         }

@@ -53,18 +53,23 @@ class TransactionAnnouncer implements DaemonInterface, RedisInteractionInterface
      * @var ClassMethods
      */
     private $hydrator;
+    /**
+     * @var string
+     */
+    private $routingKey;
 
     /**
      * TransactionAnnouncer constructor.
      * @param LoggerInterface $logger
      * @param Eth $eth
      * @param ClassMethods $hydrator
+     * @param JsonProducer $producer
      * @param \Redis $redis
      * @param RedisConfig $redisConfig
      * @param string $redisListKey
      * @param int $timeoutOnEmptyList
      * @param string $currency
-     * @param $producer
+     * @param string $routingKey
      */
     public function __construct(
         LoggerInterface $logger,
@@ -75,7 +80,8 @@ class TransactionAnnouncer implements DaemonInterface, RedisInteractionInterface
         RedisConfig $redisConfig,
         $redisListKey = TransactionChecker::class,
         $timeoutOnEmptyList = 5,
-        $currency = 'DMT'
+        $currency = 'DMT',
+        $routingKey = 'incoming-transactions'
     )
     {
 
@@ -88,6 +94,7 @@ class TransactionAnnouncer implements DaemonInterface, RedisInteractionInterface
         $this->currency = $currency;
         $this->producer = $producer;
         $this->hydrator = $hydrator;
+        $this->routingKey = $routingKey;
 
         $this->connectRedis($this->redis, $this->redisConfig);
     }
@@ -112,12 +119,13 @@ class TransactionAnnouncer implements DaemonInterface, RedisInteractionInterface
                         //@todo use generated hydrator for conversion
                         $message = new MonitoringMessage();
 
+                        $message->setHash($transaction->getHash());
                         $message->setAmount($transaction->getAmount());
                         $message->setFrom($transaction->getPayer());
                         $message->setTo($transaction->getPayee());
                         $message->setCurrency($this->currency);
 
-                        $this->producer->publish($message);
+                        $this->producer->publish((string) $message, $this->routingKey);
                     } catch (\Exception $e) {
                         $this->logger->error($e->getMessage());
                     }

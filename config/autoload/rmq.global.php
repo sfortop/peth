@@ -11,6 +11,9 @@ use Humus\Amqp\Driver\Driver;
 
 return [
     'dependencies' => [
+        'aliases' => [
+             \Humus\Amqp\JsonProducer::class => 'incoming-transactions',
+        ],
         'factories' => [
             Driver::class => \Humus\Amqp\Container\DriverFactory::class,
             'default-amqp-connection' => [\Humus\Amqp\Container\ConnectionFactory::class, 'default'],
@@ -24,10 +27,10 @@ return [
                 //@fixme set correct config
                 'default' => [
                     'type' => 'socket',
-                    'host' => 'rabbitmq',
-                    'port' => 5672,
-                    'login' => 'guest',
-                    'password' => 'guest',
+                    'host' => getenv('PGTW_RMQ_HOST')?: 'rabbitmq',
+                    'port' => getenv('PGTW_RMQ_PORT')?: 5672,
+                    'login' => getenv('PGTW_RMQ_USER') ?:'guest',
+                    'password' => getenv('PGTW_RMQ_PASS') ?:'guest',
                     'vhost' => '/',
                     'persistent' => false,
                     'read_timeout' => 3, //sec, float allowed
@@ -35,9 +38,14 @@ return [
                 ],
             ],
             'exchange' => [
-                //@fixme place correct exchange
-                'my-exchange' => [
-                    'name' => 'my-exchange',
+                //current behavior of monitoring worker
+                '' => [
+                    'name' => '',
+                    'connection' => 'default-amqp-connection',
+                    'type' => 'direct',
+                ],
+                'incoming-transactions' => [
+                    'name' => 'incoming-transactions',
                     'type' => 'direct',
                     'connection' => 'default-amqp-connection',
                     'auto_setup_fabric' => true,
@@ -46,8 +54,7 @@ return [
             'producer' => [
                 'incoming-transactions' => [
                     'type' => 'json',
-                    //@fixme place exchange name from above
-                    'exchange' => 'my-exchange',
+                    'exchange' => "",
                 ],
             ],
         ],

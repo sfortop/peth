@@ -47,6 +47,10 @@ class TransactionReader implements DaemonInterface, RedisInteractionInterface
      * @var string
      */
     private $contractAddress;
+    /**
+     * @var int
+     */
+    private $currencyFraction;
 
 
     /**
@@ -58,6 +62,7 @@ class TransactionReader implements DaemonInterface, RedisInteractionInterface
      * @param string $redisListKey
      * @param string $contractAddress
      * @param int $timeoutOnEmptyList
+     * @param int $currencyFraction
      */
     public function __construct(
         LoggerInterface $logger,
@@ -66,7 +71,9 @@ class TransactionReader implements DaemonInterface, RedisInteractionInterface
         RedisConfig $redisConfig,
         $redisListKey = BlockReader::class,
         $contractAddress = '',
-        $timeoutOnEmptyList = 5)
+        $timeoutOnEmptyList = 5,
+        $currencyFraction = 8
+    )
     {
         $this->eth = $eth;
         $this->redisConfig = $redisConfig;
@@ -75,6 +82,7 @@ class TransactionReader implements DaemonInterface, RedisInteractionInterface
         $this->timeoutOnEmptyList = $timeoutOnEmptyList;
         $this->redis = $redis;
         $this->contractAddress = $contractAddress;
+        $this->currencyFraction = $currencyFraction;
         $this->connectRedis($this->redis, $this->redisConfig);
     }
 
@@ -88,7 +96,6 @@ class TransactionReader implements DaemonInterface, RedisInteractionInterface
                     sleep($this->timeoutOnEmptyList);
                 } elseif (substr($txId, 0, 2) !== '0x') {
                     $this->logger->info(sprintf('skip incorrect id %s', $txId));
-
                 } else {
                     try {
                         $transaction = $this->eth->getTransaction($txId);
@@ -96,7 +103,8 @@ class TransactionReader implements DaemonInterface, RedisInteractionInterface
 
                         $inputData = $transaction->input();
                         if ($inputData instanceof TransactionInputTransfer && $transaction->to == $this->contractAddress) {
-                            $amount = bcdiv($inputData->wei(), bcpow('10', '8'));
+
+                            $amount = bcdiv($inputData->wei(), bcpow('10', '8'), $this->currencyFraction);
                             $this->logger->info(sprintf('Found transfer amount %s to %s',
                                 $amount,
                                 $inputData->payee));
@@ -116,7 +124,7 @@ class TransactionReader implements DaemonInterface, RedisInteractionInterface
                             $this->logger->info(sprintf('Contract %s', $transaction->to));
                             $this->logger->info(sprintf('Found transfer amount %s to %s', $inputData->amount, $inputData->payee));
                         } else {
-                            $this->logger->info(sprintf('skipped %s', $transaction->hash));
+                            $this->logger->info(sprintf('Skipped %s', $transaction->hash));
                         }
                     } catch (\RedisException $e) {
                         $this->logger->error($e->getMessage());

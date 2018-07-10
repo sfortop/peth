@@ -86,6 +86,7 @@ class TransactionChecker implements DaemonInterface, RedisInteractionInterface
             try {
                 $this->redis->ping();
                 $transactionData = $this->redis->rPop($this->redisListKey);
+                $this->logger->info(sprintf('Check transaction %s', $transactionData));
                 if (!$transactionData) {
                     sleep($this->timeoutOnEmptyList);
                 } else {
@@ -103,7 +104,7 @@ class TransactionChecker implements DaemonInterface, RedisInteractionInterface
                             $this->logger->info(sprintf('Push transaction %s with status [%s]', $receipt->transactionHash, $receipt->status));
 
                             $pushed = $this->redisLPush(self::class, [
-                                json_encode($transaction)
+                                $transactionData
                             ]);
                             if ($pushed === false) {
                                 throw new \Exception(sprintf("Can't push receipt %s",
@@ -111,8 +112,6 @@ class TransactionChecker implements DaemonInterface, RedisInteractionInterface
                             }
                         } else {
                             $this->logger->info(sprintf('Skip transaction %s with status [%s]', $receipt->transactionHash, $receipt->status));
-
-
                         }
                     } catch (\RedisException $e) {
                         $this->logger->error($e->getMessage());

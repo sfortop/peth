@@ -131,5 +131,15 @@ class MonitoringMessage
         $this->seed = $seed;
     }
 
-
+    public function __toString() : string
+    {
+        return json_encode([
+            'hash' => $this->getHash(),
+            'from' => $this->getFrom(),
+            'to' => $this->getTo(),
+            'amount' => $this->getAmount(),
+            'currency' => $this->getCurrency(),
+            'seed' => $this->getSeed(),
+        ]);
+    }
 }
