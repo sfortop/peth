@@ -3,8 +3,6 @@
  * Copyright Serhii Borodai (c) 2017-2018.
  */
 
-use Psr\Container\ContainerInterface;
-
 /**
  * Created by Serhii Borodai <clarifying@gmail.com>
  */
@@ -12,11 +10,13 @@ use Psr\Container\ContainerInterface;
 return [
     'dependencies' => [
         'factories' => [
-            \Config\RedisConfig::class => function (ContainerInterface $container) {
-                return new \Config\RedisConfig(
-                    'redis'
-                );
-            }
+            \Config\RedisConfig::class => \Config\RedisConfigFactory::class,
         ]
+    ],
+    'redis' => [
+        'host' => getenv('PGTW_REDIS') ?: 'redis',
+        'port' => getenv('PGTW_REDIS_PORT') ?: '6379',
+        'db'   => getenv('PGTW_REDIS_DB') ?: '2',
+        'timeout' => '0',
     ],
 ];
