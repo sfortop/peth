@@ -79,7 +79,9 @@ class BlockAnnouncer implements DaemonInterface, RedisInteractionInterface
                     $counter = 0;
                     $this->redis->ping();
                     $ethLastBlock = $this->eth->blockNumber();
-                    $announced = $this->redis->lIndex(self::class, 0);
+                    //$announced = $this->redis->lIndex(self::class, 0);
+                    //@todo move get/set last announced block to separate method
+                    $announced = $this->redis->get(self::class . 'announced');
                     $this->logger->info(sprintf('announced is %s, ETH last block is %s', $announced, $ethLastBlock));
 
                     while ($ethLastBlock > $announced) {
@@ -94,6 +96,8 @@ class BlockAnnouncer implements DaemonInterface, RedisInteractionInterface
                         $this->logger->info(sprintf("announced %s blocks", bcsub($announceBucket, $announced,0)));
 
                         $announced = $announceBucket;
+                        //@todo move get/set last announced block to separate method
+                        $this->redis->set(self::class . 'announced', $announced);
                         $counter ++;
                     }
 
