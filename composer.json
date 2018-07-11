@@ -1,7 +1,7 @@
 {
     "name": "sfortop/ethereum-contract-monitoring",
     "description": "",
-    "type": "project",
+    "type": "library",
     "homepage": "https://github.com/sfortop",
     "license": "MIT",
     "keywords": [
