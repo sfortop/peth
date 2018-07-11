@@ -6,12 +6,13 @@
 /**
  * Created by Serhii Borodai <clarifying@gmail.com>
  */
+declare(strict_types=1);
 
-namespace Infrastructure\Factory;
+namespace Peth\Infrastructure\Factory;
 
 
 use EthereumRPC\EthereumRPC;
-use \Infrastructure\Exception\InvalidConfigException;
+use Peth\Infrastructure\Exception\InvalidConfigException;
 use Psr\Container\ContainerInterface;
 
 class EthRPCFactory

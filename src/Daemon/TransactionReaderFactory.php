@@ -6,13 +6,14 @@
 /**
  * Created by Serhii Borodai <clarifying@gmail.com>
  */
+declare(strict_types=1);
 
-namespace Daemon;
+namespace Peth\Daemon;
 
 
-use Config\RedisConfig;
+use Peth\Config\RedisConfig;
 use EthereumRPC\API\Eth;
-use Infrastructure\Exception\InvalidConfigException;
+use Peth\Infrastructure\Exception\InvalidConfigException;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 

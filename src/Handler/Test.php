@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright SuntechSoft (c) 2017-2018.
+ * Copyright Serhii Borodai (c) 2017-2018.
  */
 
 /**
  * Created by Serhii Borodai <clarifying@gmail.com>
  */
+declare(strict_types=1);
 
-namespace Handler;
+namespace Peth\Handler;
 
 
 use EthereumRPC\API\Eth;
@@ -54,7 +55,7 @@ class Test implements RequestHandlerInterface
 
         /** @var Transaction $transactionHash */
         foreach ($block->transactions as $transactionHash) {
-            $transaction = $eth->getTransaction($transactionHash);
+            $transaction = $eth->getTransaction($transactionHash->hash);
             if ($transaction->to == '0x2ccbff3a042c68716ed2a2cb0c544a9f1d1935e1') {
                 /** @var TransactionInputTransfer $input */
                 $input = $transaction->input();

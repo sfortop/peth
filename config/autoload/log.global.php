@@ -5,7 +5,7 @@
  * @author Serhii Borodai <clarifying@gmail.com>
  */
 
-use Infrastructure\Factory\LoggerFactory;
+use Peth\Infrastructure\Factory\LoggerFactory;
 
 return [
     'dependencies' => [

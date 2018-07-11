@@ -6,12 +6,13 @@
 /**
  * Created by Serhii Borodai <clarifying@gmail.com>
  */
+declare(strict_types=1);
 
-namespace Daemon;
+namespace Peth\Daemon;
 
 
 use EthereumRPC\API\Eth;
-use Config\RedisConfig as RedisConfig;
+use Peth\Config\RedisConfig as RedisConfig;
 use Psr\Log\LoggerInterface;
 
 class BlockReader implements DaemonInterface, RedisInteractionInterface
@@ -79,7 +80,7 @@ class BlockReader implements DaemonInterface, RedisInteractionInterface
                     sleep($this->timeoutOnEmptyList);
                 } else {
                     try {
-                        $block = $this->eth->getBlock($blockToParse);
+                        $block = $this->eth->getBlock((int) $blockToParse);
                         if ($block) {
                             $this->logger->info(sprintf('Process block %s', $block->number()));
                             $this->logger->info(sprintf('Found %d transactions', count($block->transactions)));

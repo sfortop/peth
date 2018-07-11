@@ -10,7 +10,7 @@
 return [
     'dependencies' => [
         'factories' => [
-            \Config\RedisConfig::class => \Config\RedisConfigFactory::class,
+            \Peth\Config\RedisConfig::class => \Peth\Config\RedisConfigFactory::class,
         ]
     ],
     'redis' => [

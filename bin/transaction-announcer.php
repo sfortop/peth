@@ -3,7 +3,7 @@
  * Copyright Serhii Borodai (c) 2018.
  */
 
-use Daemon\TransactionAnnouncer;
+use Peth\Daemon\TransactionAnnouncer;
 use Psr\Container\ContainerInterface;
 
 

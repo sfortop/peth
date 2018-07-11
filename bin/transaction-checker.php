@@ -3,7 +3,7 @@
  * Copyright Serhii Borodai (c) 2018.
  */
 
-use Daemon\TransactionChecker;
+use Peth\Daemon\TransactionChecker;
 use Psr\Container\ContainerInterface;
 
 

@@ -6,8 +6,9 @@
 /**
  * Created by Serhii Borodai <clarifying@gmail.com>
  */
+declare(strict_types=1);
 
-namespace Infrastructure\Exception;
+namespace Peth\Infrastructure\Exception;
 
 
 class InvalidConfigException extends \Exception

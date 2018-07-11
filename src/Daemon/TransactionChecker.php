@@ -6,13 +6,14 @@
 /**
  * Created by Serhii Borodai <clarifying@gmail.com>
  */
+declare(strict_types=1);
 
-namespace Daemon;
+namespace Peth\Daemon;
 
 
-use Config\RedisConfig;
+use Peth\Config\RedisConfig;
 use EthereumRPC\API\Eth;
-use Infrastructure\DTO\Transaction;
+use Peth\Infrastructure\DTO\Transaction;
 use Psr\Log\LoggerInterface;
 use Redis;
 use Zend\Hydrator\ClassMethods;
@@ -90,36 +91,7 @@ class TransactionChecker implements DaemonInterface, RedisInteractionInterface
                 if (!$transactionData) {
                     sleep($this->timeoutOnEmptyList);
                 } else {
-                    try {
-                        $tmp = json_decode($transactionData, true);
-                        if (!$tmp) {
-                            throw new \Exception(sprintf('Failed to decode transaction data json [%s]', $transactionData));
-                        }
-                        /** @var Transaction $transaction */
-                        $transaction = $this->hydrator->hydrate($tmp, new Transaction());
-
-                        $receipt = $this->eth->getTransactionReceipt($transaction->getHash());
-
-                        if (hexdec($receipt->status)) {
-                            $this->logger->info(sprintf('Push transaction %s with status [%s]', $receipt->transactionHash, $receipt->status));
-
-                            $pushed = $this->redisLPush(self::class, [
-                                $transactionData
-                            ]);
-                            if ($pushed === false) {
-                                throw new \Exception(sprintf("Can't push receipt %s",
-                                    $receipt->transactionHash));
-                            }
-                        } else {
-                            $this->logger->info(sprintf('Skip transaction %s with status [%s]', $receipt->transactionHash, $receipt->status));
-                        }
-                    } catch (\RedisException $e) {
-                        $this->logger->error($e->getMessage());
-                    } catch (\Exception $e) {
-                        $this->logger->error($e->getMessage());
-                        $this->logger->alert(sprintf('return transaction %s to re-check', $transaction->getHash()));
-                        $this->redisLPush($this->redisListKey, [$transactionData]);
-                    }
+                    $this->checkTransaction($transactionData);
                 }
             } catch (\RedisException $exception) {
                 $this->logger->error($exception->getMessage());
@@ -127,5 +99,42 @@ class TransactionChecker implements DaemonInterface, RedisInteractionInterface
             }
         }
 
+    }
+
+    /**
+     * @param $transactionData
+     */
+    protected function checkTransaction($transactionData): void
+    {
+        try {
+            $tmp = json_decode($transactionData, true);
+            if (!$tmp) {
+                throw new \Exception(sprintf('Failed to decode transaction data json [%s]', $transactionData));
+            }
+            /** @var Transaction $transaction */
+            $transaction = $this->hydrator->hydrate($tmp, new Transaction());
+
+            $receipt = $this->eth->getTransactionReceipt($transaction->getHash());
+
+            if (hexdec($receipt->status)) {
+                $this->logger->info(sprintf('Push transaction %s with status [%s]', $receipt->transactionHash, $receipt->status));
+
+                $pushed = $this->redisLPush(self::class, [
+                    $transactionData
+                ]);
+                if ($pushed === false) {
+                    throw new \Exception(sprintf("Can't push receipt %s",
+                        $receipt->transactionHash));
+                }
+            } else {
+                $this->logger->info(sprintf('Skip transaction %s with status [%s]', $receipt->transactionHash, $receipt->status));
+            }
+        } catch (\RedisException $e) {
+            $this->logger->error($e->getMessage());
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+            $this->logger->alert(sprintf('return transaction %s to re-check', $transaction->getHash()));
+            $this->redisLPush($this->redisListKey, [$transactionData]);
+        }
     }
 }

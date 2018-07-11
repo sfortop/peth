@@ -4,7 +4,7 @@
  * Copyright Serhii Borodai (c) 2018.
  */
 
-use Daemon\TransactionReader;
+use Peth\Daemon\TransactionReader;
 use Psr\Container\ContainerInterface;
 
 /**

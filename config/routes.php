@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Handler\Test;
 use Psr\Container\ContainerInterface;
 use Zend\Expressive\Application;
 use Zend\Expressive\MiddlewareFactory;
@@ -34,5 +33,5 @@ use Zend\Expressive\MiddlewareFactory;
  * );
  */
 return function (Application $app, MiddlewareFactory $factory, ContainerInterface $container) : void {
-    $app->get('/', Test::class, 'home');
+    $app->get('/status', Peth\Handler\Status::class, 'status');
 };

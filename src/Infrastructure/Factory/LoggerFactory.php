@@ -4,12 +4,13 @@
  *
  * @author Serhii Borodai <clarifying@gmail.com>
  */
+declare(strict_types=1);
 
-namespace Infrastructure\Factory;
+namespace Peth\Infrastructure\Factory;
 
 
-use Infrastructure\Exception\InvalidConfigException;
-use Proxy\Container;
+use Peth\Infrastructure\Exception\InvalidConfigException;
+use Peth\Proxy\Container;
 use Psr\Container\ContainerInterface;
 use Zend\Log\Logger;
 use Zend\Log\PsrLoggerAdapter;

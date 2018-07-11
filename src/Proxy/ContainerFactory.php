@@ -6,8 +6,9 @@
 /**
  * Created by Serhii Borodai <clarifying@gmail.com>
  */
+declare(strict_types=1);
 
-namespace Proxy;
+namespace Peth\Proxy;
 
 
 use Psr\Container\ContainerInterface;

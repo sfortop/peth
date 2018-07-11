@@ -4,7 +4,7 @@
  * Copyright Serhii Borodai (c) 2018.
  */
 
-use Daemon\BlockReader;
+use Peth\Daemon\BlockReader;
 use Psr\Container\ContainerInterface;
 
 /**

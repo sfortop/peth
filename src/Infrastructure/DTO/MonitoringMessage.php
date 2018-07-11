@@ -1,11 +1,14 @@
 <?php
 /**
- * peth
- *
- * @author Serhii Borodai <serhii.borodai@globalgames.net>
+ * Copyright Serhii Borodai (c) 2017-2018.
  */
 
-namespace Infrastructure\DTO;
+/**
+ * Created by Serhii Borodai <clarifying@gmail.com>
+ */
+declare(strict_types=1);
+
+namespace Peth\Infrastructure\DTO;
 
 
 class MonitoringMessage
@@ -131,15 +134,4 @@ class MonitoringMessage
         $this->seed = $seed;
     }
 
-    public function __toString() : string
-    {
-        return json_encode([
-            'hash' => $this->getHash(),
-            'from' => $this->getFrom(),
-            'to' => $this->getTo(),
-            'amount' => $this->getAmount(),
-            'currency' => $this->getCurrency(),
-            'seed' => $this->getSeed(),
-        ]);
-    }
 }

@@ -4,15 +4,16 @@
  *
  * @author Serhii Borodai <serhii.borodai@globalgames.net>
  */
+declare(strict_types=1);
 
-namespace Daemon;
+namespace Peth\Daemon;
 
 
-use Config\RedisConfig;
+use Peth\Config\RedisConfig;
 use EthereumRPC\API\Eth;
 use Humus\Amqp\JsonProducer;
-use Infrastructure\DTO\MonitoringMessage;
-use Infrastructure\DTO\Transaction;
+use Peth\Infrastructure\DTO\MonitoringMessage;
+use Peth\Infrastructure\DTO\Transaction;
 use Psr\Log\LoggerInterface;
 use Zend\Hydrator\ClassMethods;
 
@@ -125,7 +126,7 @@ class TransactionAnnouncer implements DaemonInterface, RedisInteractionInterface
                         $message->setTo($transaction->getPayee());
                         $message->setCurrency($this->currency);
 
-                        $this->producer->publish((string) $message, $this->routingKey);
+                        $this->producer->publish($this->hydrator->extract($message), $this->routingKey);
                     } catch (\Exception $e) {
                         $this->logger->error($e->getMessage());
                     }

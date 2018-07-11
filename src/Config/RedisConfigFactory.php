@@ -6,11 +6,12 @@
 /**
  * Created by Serhii Borodai <clarifying@gmail.com>
  */
+declare(strict_types=1);
 
-namespace Config;
+namespace Peth\Config;
 
 
-use Infrastructure\Exception\InvalidConfigException;
+use Peth\Infrastructure\Exception\InvalidConfigException;
 use Psr\Container\ContainerInterface;
 
 class RedisConfigFactory

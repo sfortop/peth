@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use Daemon\TransactionReader;
-use Daemon\TransactionReaderFactory;
+use Peth\Daemon\TransactionReader;
+use Peth\Daemon\TransactionReaderFactory;
 use EthereumRPC\EthereumRPC;
-use Infrastructure\Factory\EthRPCFactory;
+use Peth\Infrastructure\Factory\EthRPCFactory;
 
 
 return [

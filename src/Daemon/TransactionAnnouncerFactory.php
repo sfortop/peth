@@ -6,11 +6,12 @@
 /**
  * Created by Serhii Borodai <clarifying@gmail.com>
  */
+declare(strict_types=1);
 
-namespace Daemon;
+namespace Peth\Daemon;
 
 
-use Config\RedisConfig;
+use Peth\Config\RedisConfig;
 use EthereumRPC\API\Eth;
 use Humus\Amqp\JsonProducer;
 use Psr\Container\ContainerInterface;

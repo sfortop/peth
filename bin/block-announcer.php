@@ -4,7 +4,7 @@
  * Copyright Serhii Borodai (c) 2018.
  */
 
-use Daemon\BlockAnnouncer;
+use Peth\Daemon\BlockAnnouncer;
 use Psr\Container\ContainerInterface;
 
 /**
