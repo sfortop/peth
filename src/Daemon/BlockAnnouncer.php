@@ -56,7 +56,12 @@ class BlockAnnouncer implements DaemonInterface, RedisInteractionInterface
      * @param int $announcePeriod
      * @param int $connectionTimeoutTreshhold
      */
-    public function __construct(LoggerInterface $logger, Eth $eth, Redis $redis, RedisConfig $redisConfig, $announcePeriod = 15, $connectionTimeoutTreshhold = 600)
+    public function __construct(LoggerInterface $logger,
+                                Eth $eth,
+                                Redis $redis,
+                                RedisConfig $redisConfig,
+                                $announcePeriod = 15,
+                                $connectionTimeoutTreshhold = 600)
     {
 
         $this->eth = $eth;
@@ -71,10 +76,10 @@ class BlockAnnouncer implements DaemonInterface, RedisInteractionInterface
 
     public function process()
     {
-        $connectionTimeOut = 0;
+//        $connectionTimeOut = 0;
         while (true) {
             sleep($this->announcePeriod);
-            while ($connectionTimeOut < $this->connectionTimeoutTreshhold) {
+//            while ($connectionTimeOut < $this->connectionTimeoutTreshhold) {
                 try {
                     $counter = 0;
                     $this->redis->ping();
@@ -101,14 +106,14 @@ class BlockAnnouncer implements DaemonInterface, RedisInteractionInterface
                         $counter ++;
                     }
 
-                    $connectionTimeOut = 0;
+//                    $connectionTimeOut = 0;
                     $this->logger->info(sprintf('Done %s iterations', $counter));
                 } catch (\RedisException $e) {
                     $this->connectRedis($this->redis, $this->redisConfig);
                 } catch (\Exception $exception) {
                     $this->logger->error($exception->getMessage());
                 }
-            }
+//            }
         }
     }
 
