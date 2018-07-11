@@ -13,7 +13,6 @@
         "psr-11",
         "psr-15",
         "zf",
-        "zendframework",
         "zend-expressive"
     ],
     "config": {
