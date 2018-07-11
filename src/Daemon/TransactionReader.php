@@ -121,8 +121,7 @@ class TransactionReader implements DaemonInterface, RedisInteractionInterface
                                     $transaction->hash));
                             }
                         } elseif ($inputData instanceof TransactionInputTransfer) {
-                            $this->logger->info(sprintf('Contract %s', $transaction->to));
-                            $this->logger->info(sprintf('Found transfer amount %s to %s', $inputData->amount, $inputData->payee));
+                            $this->logger->info(sprintf('Skipped contract %s', $transaction->to));
                         } else {
                             $this->logger->info(sprintf('Skipped %s', $transaction->hash));
                         }
