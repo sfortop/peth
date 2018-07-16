@@ -1,3 +1,4 @@
+
 #php ethereum transaction monitoring
 
 
@@ -21,3 +22,7 @@ all scripts work with Redis list and put result to own list to next processing
      'host' => getenv('PGTW_REDIS') ?: 'redis',
      'port' => getenv('PGTW_REDIS_PORT') ?: '6379',
      'db'   => getenv('PGTW_REDIS_DB') ?: '2',   
+ `geth` node configuration
+ 
+     'host' => parse_url(getenv('ETHEREUM_NODE_URL'))['host'] ?? null,
+ 
