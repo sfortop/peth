@@ -15,8 +15,8 @@ return [
     ],
     'redis' => [
         'host' => getenv('PGTW_REDIS') ?: 'redis',
-        'port' => getenv('PGTW_REDIS_PORT') ?: '6379',
-        'db'   => getenv('PGTW_REDIS_DB') ?: '2',
-        'timeout' => '0',
+        'port' => getenv('PGTW_REDIS_PORT') ?: 6379,
+        'db'   => getenv('PGTW_REDIS_DB') ?: 2,
+        'timeout' => 0,
     ],
 ];
