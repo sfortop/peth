@@ -74,6 +74,13 @@
         "psr-4": {
         }
     },
+    "bin":[
+        "bin/block-announcer.php",
+        "bin/block-reader.php",
+        "bin/transaction-reader.php",
+        "bin/transaction-checker.php",
+        "bin/transaction-announcer.php"
+    ],
     "scripts": {
         "post-create-project-cmd": [
             "@development-enable"
