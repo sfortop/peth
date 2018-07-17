@@ -9,15 +9,16 @@ use Humus\Amqp\Driver\Driver;
  * Created by Serhii Borodai <clarifying@gmail.com>
  */
 
+//@todo replace exchange name setup with env configurable options
 return [
     'dependencies' => [
         'aliases' => [
-             \Humus\Amqp\JsonProducer::class => 'incoming-transactions',
+             \Humus\Amqp\JsonProducer::class => 'incoming-transactions-peth',
         ],
         'factories' => [
             Driver::class => \Humus\Amqp\Container\DriverFactory::class,
             'default-amqp-connection' => [\Humus\Amqp\Container\ConnectionFactory::class, 'default'],
-            'incoming-transactions' => [\Humus\Amqp\Container\ProducerFactory::class, 'incoming-transactions'],
+            'incoming-transactions-peth' => [\Humus\Amqp\Container\ProducerFactory::class, 'incoming-transactions-peth'],
         ],
     ],
     'humus' => [
@@ -44,15 +45,15 @@ return [
                     'connection' => 'default-amqp-connection',
                     'type' => 'direct',
                 ],
-                'incoming-transactions' => [
-                    'name' => 'incoming-transactions',
+                'incoming-transactions-peth' => [
+                    'name' => 'incoming-transactions-peth',
                     'type' => 'direct',
                     'connection' => 'default-amqp-connection',
                     'auto_setup_fabric' => true,
                 ],
             ],
             'producer' => [
-                'incoming-transactions' => [
+                'incoming-transactions-peth' => [
                     'type' => 'json',
                     'exchange' => "",
                 ],
