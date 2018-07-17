@@ -31,8 +31,9 @@ class TransactionAnnouncerFactory
         $redis = $container->get(\Redis::class);
         $redisConfig = $container->get(RedisConfig::class);
 
+        $routingKey = $container->get('config')['routing-key'][TransactionAnnouncer::class];
         /** @var JsonProducer $producer */
-        $producer = $container->get('incoming-transactions');
+        $producer = $container->get($routingKey);
         return new TransactionAnnouncer(
             $logger,
             $eth,
@@ -40,7 +41,7 @@ class TransactionAnnouncerFactory
             $producer,
             $redis,
             $redisConfig,
-            $container->get('config')['routing-key'][TransactionAnnouncer::class],
+            $routingKey,
             TransactionChecker::class
         );
     }
