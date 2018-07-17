@@ -27,7 +27,7 @@ if (file_exists($a = getcwd() . '/vendor/autoload.php')) {
 (function () {
     /** @var ContainerInterface $container */
     $container = require __DIR__ . '/../config/container.php';
-    $transactionReader = $container->get(TransactionChecker::class);
+    $transactionChecker = $container->get(TransactionChecker::class);
 
-    $transactionReader->process();
+    $transactionChecker->process();
 })();

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Peth\Daemon\TransactionAnnouncer;
 use Peth\Daemon\TransactionReader;
 use Peth\Daemon\TransactionReaderFactory;
 use EthereumRPC\EthereumRPC;
@@ -28,6 +29,7 @@ return [
         'factories'  => [
             EthereumRPC::class => EthRPCFactory::class,
             TransactionReader::class => TransactionReaderFactory::class,
+            TransactionAnnouncer::class => \Peth\Daemon\TransactionAnnouncerFactory::class,
             // Fully\Qualified\ClassName::class => Fully\Qualified\FactoryName::class,
         ],
     ],
