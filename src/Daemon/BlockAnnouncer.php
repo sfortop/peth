@@ -79,7 +79,6 @@ class BlockAnnouncer implements DaemonInterface, RedisInteractionInterface
     {
 //        $connectionTimeOut = 0;
         while (true) {
-            sleep($this->announcePeriod);
 //            while ($connectionTimeOut < $this->connectionTimeoutTreshhold) {
                 try {
                     $counter = 0;
@@ -91,11 +90,11 @@ class BlockAnnouncer implements DaemonInterface, RedisInteractionInterface
                     $this->logger->info(sprintf('announced is %s, ETH last block is %s', $announced, $ethLastBlock));
 
                     while ($ethLastBlock > $announced) {
-                        $announceBucket = ($ethLastBlock - $announced < 1000 ? $ethLastBlock : bcadd(1000 , $announced,0));
+                        $announceBucket = ($ethLastBlock - $announced < 1000 ? $ethLastBlock : bcadd("1000" , $announced,0));
 
                         $this->logger->info(sprintf('bucket from %s to %s', $announced, $announceBucket));
 
-                        $pushed = $this->redisLPush(self::class, range(bcadd($announced, 1, 0), $announceBucket));
+                        $pushed = $this->redisLPush(self::class, range(bcadd($announced, "1", 0), $announceBucket));
                         if ($pushed === false) {
                             throw new \Exception(sprintf("Can't push announce bucket %s", $announceBucket));
                         }
@@ -115,6 +114,7 @@ class BlockAnnouncer implements DaemonInterface, RedisInteractionInterface
                     $this->logger->error($exception->getMessage());
                 }
 //            }
+            sleep($this->announcePeriod);
         }
     }
 
