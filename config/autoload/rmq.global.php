@@ -60,5 +60,8 @@ return [
             ],
         ],
     ],
+    'routing-key' => [
+        \Peth\Daemon\TransactionAnnouncer::class => 'incoming-transactions-peth',
+    ]
 ];
 

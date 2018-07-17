@@ -84,7 +84,7 @@ class BlockAnnouncer implements DaemonInterface, RedisInteractionInterface
                 try {
                     $counter = 0;
                     $this->redis->ping();
-                    $ethLastBlock = $this->eth->blockNumber();
+                    $ethLastBlock = (string) $this->eth->blockNumber();
                     //$announced = $this->redis->lIndex(self::class, 0);
                     //@todo move get/set last announced block to separate method
                     $announced = $this->redis->get(self::class . 'announced');

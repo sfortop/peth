@@ -40,6 +40,7 @@ class TransactionAnnouncerFactory
             $producer,
             $redis,
             $redisConfig,
+            $container->get('config')['routing-key'][TransactionAnnouncer::class],
             TransactionChecker::class
         );
     }

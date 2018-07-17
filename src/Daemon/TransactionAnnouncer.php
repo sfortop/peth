@@ -79,10 +79,10 @@ class TransactionAnnouncer implements DaemonInterface, RedisInteractionInterface
         JsonProducer $producer,
         \Redis $redis,
         RedisConfig $redisConfig,
+        $routingKey = 'incoming-transactions',
         $redisListKey = TransactionChecker::class,
         $timeoutOnEmptyList = 5,
-        $currency = 'DMT',
-        $routingKey = 'incoming-transactions'
+        $currency = 'DMT'
     )
     {
 
