@@ -1,3 +1,4 @@
+#!/usr/local/bin/php
 <?php
 /**
  * Copyright Serhii Borodai (c) 2018.
