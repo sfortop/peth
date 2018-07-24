@@ -99,6 +99,7 @@ class TransactionReader implements DaemonInterface, RedisInteractionInterface
                     $this->logger->info(sprintf('skip incorrect id %s', $txId));
                 } else {
                     try {
+                        $this->logger->info(sprintf('Fetch transaction by id: %s', $txId));
                         $transaction = $this->eth->getTransaction($txId);
                         $this->logger->info(sprintf('Process transaction %s', $transaction->hash));
 
