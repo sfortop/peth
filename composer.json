@@ -42,6 +42,7 @@
         "sandrokeil/interop-config": "^2.1",
         "zendframework/zend-component-installer": "^2.1",
         "zendframework/zend-config-aggregator": "^1.1",
+        "zendframework/zend-db": "^2.9",
         "zendframework/zend-di": "^3.0",
         "zendframework/zend-diactoros": "^1.8",
         "zendframework/zend-expressive": "^3.0",
