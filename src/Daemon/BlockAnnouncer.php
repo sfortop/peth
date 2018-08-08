@@ -96,8 +96,7 @@ class BlockAnnouncer implements DaemonInterface, RedisInteractionInterface
                     //@todo move get/set last announced block to separate method
                     $announced = $this->redis->get(self::class . 'announced');
                     if (!$announced) {
-                        $statement = $this->adapter->getDriver()->createStatement('SELECT announced FROM peth')->execute();
-                        die();
+                        $announced = $this->getAnnouncedFromDB();
                     }
                     $this->logger->info(sprintf('announced is %s, ETH last block is %s', $announced, $ethLastBlock));
 
@@ -110,6 +109,7 @@ class BlockAnnouncer implements DaemonInterface, RedisInteractionInterface
                         if ($pushed === false) {
                             throw new \Exception(sprintf("Can't push announce bucket %s", $announceBucket));
                         }
+                        $this->setAnnouncedToDB($announceBucket);
                         $this->logger->info(sprintf("announced %s blocks", bcsub($announceBucket, $announced,0)));
 
                         $announced = $announceBucket;
@@ -165,6 +165,35 @@ class BlockAnnouncer implements DaemonInterface, RedisInteractionInterface
     public function getRedis(): Redis
     {
         return $this->redis;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getAnnouncedFromDB(): string
+    {
+        /** @var \Zend\Db\Adapter\Driver\Pdo\Result $statement */
+        $statement = $this->adapter->getDriver()->createStatement('SELECT announced FROM peth')->execute();
+        if ($statement->valid()) {
+            $row = $statement->current();
+            $announced = $row['announced'] ?? '0';
+        } else {
+            $announced = '0';
+        }
+        return $announced;
+    }
+
+    /**
+     * @param $announceBucket
+     * @return int
+     */
+    protected function setAnnouncedToDB($announceBucket): int
+    {
+        $result = $this->adapter->getDriver()
+            ->createStatement('INSERT peth (announced) VALUES(:announced) ON DUPLICATE KEY UPDATE announced = :announced')
+            ->execute(['announced' => $announceBucket])
+        ;
+        return $result->getAffectedRows();
     }
 
 }
