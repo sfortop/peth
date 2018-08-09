@@ -22,6 +22,7 @@ class BlockAnnouncer implements DaemonInterface, RedisInteractionInterface
 {
 
     use RedisInteractionTrait;
+    const DB_NAMESPACE = 'peth';
 
     /**
      * @var Eth
@@ -173,7 +174,9 @@ class BlockAnnouncer implements DaemonInterface, RedisInteractionInterface
     protected function getAnnouncedFromDB(): string
     {
         /** @var \Zend\Db\Adapter\Driver\Pdo\Result $statement */
-        $statement = $this->adapter->getDriver()->createStatement('SELECT announced FROM peth')->execute();
+        $statement = $this->adapter->getDriver()->createStatement(
+            sprintf('SELECT announced FROM peth WHERE namespace = "%s"', self::DB_NAMESPACE)
+        )->execute();
         if ($statement->valid()) {
             $row = $statement->current();
             $announced = $row['announced'] ?? '0';
@@ -190,8 +193,8 @@ class BlockAnnouncer implements DaemonInterface, RedisInteractionInterface
     protected function setAnnouncedToDB($announceBucket): int
     {
         $result = $this->adapter->getDriver()
-            ->createStatement('INSERT peth (announced) VALUES(:announced) ON DUPLICATE KEY UPDATE announced = :announced')
-            ->execute(['announced' => $announceBucket])
+            ->createStatement('INSERT peth (announced, namespace) VALUES(:announced, :namespace) ON DUPLICATE KEY UPDATE announced = :announced')
+            ->execute(['announced' => $announceBucket, 'namespace' => self::DB_NAMESPACE])
         ;
         return $result->getAffectedRows();
     }
